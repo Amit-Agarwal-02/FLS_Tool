@@ -1,0 +1,120 @@
+<!--
+    @description       :
+    @author            : Amit Agarwal
+    @group             :
+    @last modified on  : 
+    @last modified by  : Amit Agarwal
+-->
+
+<template>
+    <div class="c-container" style="border: 1px solid black;">
+        <lightning-card title="Assign Field Level Security(FLS)" icon-name="standard:bundle_config">
+            <template if:false={loaded}>
+                <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+            </template>
+            <lightning-layout multiple-rows="true">
+
+                <lightning-layout-item padding="around-small" size="11">
+                    <lightning-layout>
+                        <lightning-layout-item class="slds-p-right_x-small" size="6">
+                            <c-generic-lookup-component data-lookup-id="PermissionLookup"
+                                selected-item={initialSelection} filter-criteria={permSetfilters}
+                                errors={PermissionLookupErrors} onsearch={handlePermissionSearch}
+                                onselectionchange={handleSelectionChange}
+                                lookuplabel="Select Permission Set to assign FLS" placeholder="Search Permission Set..."
+                                multi-select-lookup objectname="PermissionSet" title-fields={permSetfields}
+                                subtitle-fields={permsetotherfields}>
+                            </c-generic-lookup-component>
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-p-right_xx-small" size="6">
+                            <c-generic-lookup-component data-lookup-id="ProfileLookup" selected-item={initialSelection}
+                                filter-criteria={profilefilters} errors={ProfileLookupErrors}
+                                onsearch={handleProfileSearch} onselectionchange={handleProfileSelectChange}
+                                lookuplabel="Select Profile to assign FLS" placeholder="Search Profile..."
+                                multi-select-lookup objectname="Profile" title-fields={profilefields}
+                                subtitle-fields={profileotherfields}>
+                            </c-generic-lookup-component>
+                        </lightning-layout-item>
+                        <lightning-layout-item class="slds-p-top_x-large" size="1">
+                            <lightning-helptext
+                                content="You can select multiple Permission Sets and Profiles to assign FLS for similar objects and related fields.">
+                            </lightning-helptext>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+
+                <lightning-layout-item padding="around-small" size="12">
+                    <lightning-layout>
+                        <lightning-layout-item size="12">
+                            <lightning-layout>
+                                <lightning-layout-item class="slds-p-left_small" size="6">
+                                    <div>
+                                        <b> Please upload a CSV file with required information. </b>
+                                        <br />
+                                        <!--<lightning-button variant="base" label="View Sample" title="View Sample"
+                                            icon-name="utility:preview" onclick={previewFile}
+                                            class="slds-m-left_x-small"></lightning-button>
+                                        <br />
+                                        <lightning-button variant="base" label="Downlaod Sample" title="Downlaod Sample"
+                                            icon-name="utility:download" onclick={downloadFile}
+                                            class="slds-m-left_x-small"></lightning-button> -->
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-text-align_center" size="1">
+
+                                </lightning-layout-item>
+                                <lightning-layout-item class="slds-text-align_center" size="1">
+
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+
+                <lightning-layout-item padding="around-small" size="12">
+                    <lightning-layout>
+                        <lightning-layout-item size="6">
+                            <div class="page-section page-right">
+                                <lightning-file-upload name="fileUploader" disabled={disableFileUpload}
+                                    accept={acceptedFormats} onuploadfinished={handleUploadFinished} multiple>
+                                </lightning-file-upload>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-card>
+    </div>
+
+    <template if:true={bShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirmation Needed</h2>
+                </header>
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium slds-text-align_center" id="modal-content-id-1">
+                    <br />
+                    <p><b>Are you sure the details provided are correct and want to proceed further ?</b></p>
+                    <br />
+                </div>
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                    <lightning-button label="No" title="No" onclick={closeModal} class="slds-m-left_x-small">
+                    </lightning-button>
+                    <lightning-button variant="brand" label="Yes" title="Yes" onclick={handleUpdateFLS}
+                        class="slds-m-left_x-small"></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

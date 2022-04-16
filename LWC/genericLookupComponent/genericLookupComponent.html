@@ -1,0 +1,105 @@
+<!--
+    @description       :
+    @author            : Amit Agarwal
+    @group             :
+    @last modified on  : 
+    @last modified by  : Amit Agarwal
+-->
+<template>
+    <div class="slds-form-element">
+        <label class="slds-form-element__label" for="combobox">{lookuplabel}</label>
+        <template for:each={errors} for:item="error">
+            <label key={error.id} role="alert"
+                class="slds-form-element__label slds-m-top_xx-small form-error">{error.message}</label>
+        </template>
+        <div class="slds-form-element__control">
+            <div>
+                <div class={getDropDownClass} aria-expanded={isExapanded} aria-haspopup="listbox" role="combobox">
+
+                    <div class={getComboboxClass} role="none">
+                        <template if:false={isMultiSelectAllowed}>
+                            <lightning-icon icon-name={getSelectIconName} size="x-small" alternative-text="Standard Icon"
+                                class={getSelectIconClass}></lightning-icon>
+                        </template>
+
+                        <template if:false={isMultiSelectAllowed}>
+                            <template if:false={inputToggle}>
+                                <input type="text" class={getInputClass} aria-autocomplete="list"
+                                    aria-controls="listbox" autocomplete="off" role="textbox" placeholder={placeholder}
+                                    value={getInputValue}  onfocus={handleFocus}
+                                    onblur={handleBlur} oninput={handleInput}></input>
+                            </template>
+                        </template>
+
+                        <template if:false={isMultiSelectAllowed}>
+                            <template if:true={inputToggle}>
+                                <input type="text" class={getInputClass} aria-autocomplete="list"
+                                    aria-controls="listbox" autocomplete="off" role="textbox" readonly
+                                    placeholder={placeholder} value={getInputValue} onfocus={handleFocus}
+                                    onblur={handleBlur} oninput={handleInput}></input>
+                            </template>
+                        </template>
+
+                        <template if:true={isMultiSelectAllowed}>
+                            <input type="text" class={getInputClass} aria-autocomplete="list" aria-controls="listbox"
+                                autocomplete="off" role="textbox" id="combobox" placeholder={placeholder}
+                                value={getInputValue} onfocus={handleFocus}
+                                onblur={handleBlur} oninput={handleInput}></input>
+                        </template>
+
+
+                        <lightning-icon icon-name="utility:search" size="x-small" alternative-text="search icon"
+                            class={getSearchIconClass}></lightning-icon>
+
+                        <template if:false={isMultiSelectAllowed}>
+                            <button type="button" class={getClearSelectionButtonClass} title="Remove selected record"
+                                onclick={handleRemoveSelection}>
+                                <lightning-icon icon-name="utility:close" size="x-small"
+                                    alternative-text="Remove selected record" class="slds-button__icon">
+                                </lightning-icon>
+                            </button>
+                        </template>
+                    </div>
+                    <div id="listbox" role="listbox" >
+                        <ul class={getListboxClass} style ="margin:5px; width: 100%;  height: 300px;  overflow: auto; text-align:justify;" role="presentation">
+                            <template for:each={searchResults} for:item="result">
+                                <li key={result.id} role="presentation" onclick={handleResultClick} data-recordid={result.id} class="slds-listbox__item">
+                                    <span  
+                                        class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta"
+                                        role="option"  data-recordid={result.id}>
+                                        <span class="slds-media__figure">
+                                            <lightning-icon size="xx-small" icon-name={result.icon}></lightning-icon>
+                                        </span>
+                                        <span class="slds-media__body">
+                                            <span
+                                                class="slds-listbox__option-text slds-listbox__option-text_entity">{result.title}
+                                            </span>
+                                            <span
+                                                class="slds-listbox__option-meta slds-listbox__option-meta_entity slds-truncate"
+                                                title={result.subtitle}>{result.subtitle}
+                                            </span>
+                                        </span>
+                                    </span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <template if:true={isMultiSelectAllowed}>
+                <div id="selection" role="listbox" aria-orientation="horizontal">
+                    <ul class="slds-listbox slds-listbox_horizontal" role="listbox" aria-label="Selected Options:"
+                        aria-orientation="horizontal" aria-describedby="listbox-pill-default">
+                        <template for:each={selectedItem} for:item="item">
+                            <li key={item.id} role="presentation" class="slds-listbox-item">
+                                <lightning-pill label={item.title} onremove={handleRemoveSelectedItem} name={item.id}>
+                                    <lightning-icon size="xxx-small" icon-name={item.icon}></lightning-icon>
+                                </lightning-pill>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>
