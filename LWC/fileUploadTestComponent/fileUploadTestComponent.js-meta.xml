@@ -2,7 +2,7 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>54.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>File Upload</masterLabel>
+    <masterLabel>FLS File Upload Tool</masterLabel>
     <targets>
         <target>lightning__AppPage</target>
         <target>lightning__HomePage</target>
